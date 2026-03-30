@@ -1,10 +1,30 @@
+# grafana:
+#   enabled: true
+#   adminUser: admin
+#   adminPassword: Admin@123
+#   service:
+#     type: LoadBalancer
+
+# prometheus:
+#   prometheusSpec:
+#     serviceMonitorSelectorNilUsesHelmValues: false
+
 grafana:
   enabled: true
   adminUser: admin
   adminPassword: Admin@123
+
+  service:
+    type: LoadBalancer
+    port: 80
+
+prometheus:
   service:
     type: LoadBalancer
 
-prometheus:
   prometheusSpec:
     serviceMonitorSelectorNilUsesHelmValues: false
+
+alertmanager:
+  service:
+    type: LoadBalancer

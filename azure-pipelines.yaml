@@ -112,3 +112,17 @@ stages:
 
               terraform apply -auto-approve tfplan          
 
+        - task: Bash@3
+          displayName: 'Deploy Application'
+          inputs:
+            filePath: 'Scripts/deploy-app.sh'
+
+        - task: Bash@3
+          displayName: 'Install Helm'
+          inputs:
+            filePath: 'Scripts/install-helm.sh'
+
+        - task: Bash@3
+          displayName: 'Deploy Monitoring'
+          inputs:
+            filePath: 'Monitoring/deploy-monitoring.sh'

@@ -12,8 +12,13 @@ echo " Deploying Monitoring Stack"
 echo "========================================="
 
 helm upgrade --install monitoring ./Monitoring/helm \
-  --namespace monitoring \
-  --create-namespace
+  -n monitoring \
+  --create-namespace \
+  -f Monitoring/helm/override-values.yaml \
+  --wait \
+  --timeout 10m
+
+echo "Monitoring stack deployed successfully"
 
 echo "========================================="
 echo " Waiting for Grafana LoadBalancer"

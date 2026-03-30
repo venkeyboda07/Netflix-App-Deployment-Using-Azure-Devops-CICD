@@ -6,11 +6,11 @@ trigger:
     include:
       - main
       - feature_develop
-  # paths:
-  #   include:
-  #     - src/*
-  #     - Dockerfile
-  #     - package.json
+  paths:
+    include:
+      - src/*
+      - Dockerfile
+      - package.json
 
 variables:
   dockerimagerepo: 'venkeyboda/netflix'
@@ -22,12 +22,6 @@ stages:
 
 - stage: CI
   displayName: "Build & Push Docker Image"
-  condition: |
-    or(
-      contains(variables['Build.SourceVersionMessage'], 'src'),
-      contains(variables['Build.SourceVersionMessage'], 'Dockerfile'),
-      contains(variables['Build.SourceVersionMessage'], 'package.json')
-    )
   jobs:
     - job: build
       displayName: 'Building and testing'

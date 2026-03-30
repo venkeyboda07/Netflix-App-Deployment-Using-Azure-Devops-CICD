@@ -91,7 +91,7 @@ stages:
           displayName: 'Install Terraform'
           inputs:
             targetType: 'filePath'
-            filePath: 'Scripts/terraform.sh'              
+            filePath: 'Scripts/install-terraform.sh'              
 
         - task: AzureCLI@2
           displayName: Terraform Init Plan Apply
@@ -110,7 +110,12 @@ stages:
               -input=false \
               -out=tfplan
 
-              terraform apply -auto-approve tfplan          
+              terraform apply -auto-approve tfplan
+              
+              az aks get-credentials \
+                --resource-group myRG \
+                --name myAKS \
+                --overwrite-existing
 
         - task: Bash@3
           displayName: 'Deploy Application'

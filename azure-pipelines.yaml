@@ -93,11 +93,16 @@ stages:
             targetType: 'filePath'
             filePath: 'Scripts/terraform.sh'              
 
-        - task: Bash@3
-          displayName: 'terraform initialization'
+        - task: AzureCLI@2
+          displayName: Terraform Init Plan Apply
           inputs:
-            targetType: 'inline'
-            script: |
+            azureSubscription: 'azure-service-connection'
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+
+              cd Infra
+
               terraform init
 
               terraform plan \
@@ -105,6 +110,5 @@ stages:
               -input=false \
               -out=tfplan
 
-              terraform apply -auto-approve tfplan
-            workingDirectory: './Infra'           
+              terraform apply -auto-approve tfplan          
 

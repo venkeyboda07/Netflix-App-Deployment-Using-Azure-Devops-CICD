@@ -6,11 +6,11 @@ trigger:
     include:
       - main
       - feature_develop
-  paths:
-    include:
-      - src/*
-      - Dockerfile
-      - package.json
+  # paths:
+  #   include:
+  #     - src/*
+  #     - Dockerfile
+  #     - package.json
 
 variables:
   dockerimagerepo: 'venkeyboda/netflix'

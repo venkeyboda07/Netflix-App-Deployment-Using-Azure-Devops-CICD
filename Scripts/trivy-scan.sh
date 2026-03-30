@@ -27,10 +27,16 @@ trivy image --format table -o trivy-reports/trivy-report.txt $IMAGE
 echo "Generating JSON report..."
 trivy image --format json -o trivy-reports/trivy-report.json $IMAGE
 
+echo "Downloading HTML template..."
+wget https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl
+
 echo "Generating HTML report..."
+
 trivy image \
+--scanners vuln \
+--severity HIGH,CRITICAL \
 --format template \
---template "@contrib/html.tpl" \
+--template "@html.tpl" \
 -o trivy-reports/trivy-report.html \
 $IMAGE
 

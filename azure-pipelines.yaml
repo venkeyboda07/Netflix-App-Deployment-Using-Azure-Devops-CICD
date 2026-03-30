@@ -88,6 +88,12 @@ stages:
               docker pull $(dockerimagerepo):$(dockerImagetag)
 
         - task: Bash@3
+          displayName: 'Install Terraform'
+          inputs:
+            targetType: 'filePath'
+            filePath: 'Scripts/terraform.sh'              
+
+        - task: Bash@3
           displayName: 'terraform initialization'
           inputs:
             targetType: 'inline'

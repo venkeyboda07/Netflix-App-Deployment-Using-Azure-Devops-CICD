@@ -18,14 +18,14 @@ terraform version
 
 echo "Running Terraform"
 
-terraform init
+# terraform init
 
-terraform plan \
-    -var-file="terraform.tfvars" \
-    -input=false \
-    -out=tfplan
+# terraform plan \
+#     -var-file="terraform.tfvars" \
+#     -input=false \
+#     -out=tfplan
 
-# Uncomment if needed
-# terraform apply -auto-approve
+# # Uncomment if needed
+# # terraform apply -auto-approve
 
 echo "Script completed"

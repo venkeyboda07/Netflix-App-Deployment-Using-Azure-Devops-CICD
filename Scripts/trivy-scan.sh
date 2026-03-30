@@ -2,15 +2,36 @@
 set -e
 
 echo "Installing Trivy..."
-sudo apt-get update
-sudo apt-get install wget apt-transport-https gnupg lsb-release -y
 
-wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | \
-sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt-get update
+sudo apt-get install wget gnupg lsb-release -y
+
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | \
+gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+
+echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | \
+sudo tee /etc/apt/sources.list.d/trivy.list
 
 sudo apt-get update
 sudo apt-get install trivy -y
 
-echo "Scanning Docker Image..."
-trivy image $1 -o Security/trivy-report.xml
+IMAGE=$1
+
+echo "Scanning image: $IMAGE"
+
+mkdir -p trivy-reports
+
+echo "Generating table report..."
+trivy image --format table -o trivy-reports/trivy-report.txt $IMAGE
+
+echo "Generating JSON report..."
+trivy image --format json -o trivy-reports/trivy-report.json $IMAGE
+
+echo "Generating HTML report..."
+trivy image \
+--format template \
+--template "@contrib/html.tpl" \
+-o trivy-reports/trivy-report.html \
+$IMAGE
+
+echo "Trivy scan completed"

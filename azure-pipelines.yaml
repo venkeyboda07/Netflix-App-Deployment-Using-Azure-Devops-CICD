@@ -52,3 +52,11 @@ stages:
             repository: $(dockerimagerepo)
             tags: |
               $(dockerImagetag)
+
+        - task: PublishBuildArtifacts@1
+          displayName: 'Upload Trivy Report'
+          inputs:
+            PathtoPublish: 'trivy-reports'
+            ArtifactName: 'Trivy-Report'
+            publishLocation: 'Container'
+            

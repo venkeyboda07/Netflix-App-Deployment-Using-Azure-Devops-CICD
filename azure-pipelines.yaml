@@ -4,7 +4,6 @@ pool:
 trigger:
   branches:
     include:
-      - main
       - feature_develop
   paths:
     include:
@@ -22,6 +21,13 @@ stages:
 
 - stage: CI
   displayName: "Build & Push Docker Image"
+  condition: |
+    or(
+      contains(variables['Build.SourceVersionMessage'], 'src'),
+      contains(variables['Build.SourceVersionMessage'], 'Dockerfile'),
+      contains(variables['Build.SourceVersionMessage'], 'package.json')
+    )
+
   jobs:
     - job: build
       displayName: 'Building and testing'
@@ -59,4 +65,40 @@ stages:
             PathtoPublish: 'trivy-reports'
             ArtifactName: 'Trivy-Report'
             publishLocation: 'Container'
-            
+
+# ========================= CD STAGE =========================
+
+- stage: CD
+  displayName: "Deploy to AKS"
+  dependsOn: []
+  condition: succeeded()
+
+  jobs:
+    - job: Deploy
+      displayName: 'Infrastructure + App + Monitoring'
+      pool:
+        vmImage: 'ubuntu-latest'
+
+      steps:
+
+        - task: CmdLine@2
+          displayName: 'Docker Pull'
+          inputs:
+            script: |
+              docker pull $(dockerimagerepo):$(dockerImagetag)
+
+        - task: Bash@3
+          displayName: 'terraform initialization'
+          inputs:
+            targetType: 'inline'
+            script: |
+              terraform init
+
+              terraform plan \
+              -var-file="terraform.tfvars" \
+              -input=false \
+              -out=tfplan
+
+              terraform apply -auto-approve tfplan
+            workingDirectory: './Infra'           
+

@@ -20,7 +20,7 @@ echo " Waiting for Grafana LoadBalancer"
 echo "========================================="
 
 ATTEMPTS=30
-SLEEP_SECONDS=20
+SLEEP_SECONDS=10
 
 for ((i=1;i<=ATTEMPTS;i++)); do
 

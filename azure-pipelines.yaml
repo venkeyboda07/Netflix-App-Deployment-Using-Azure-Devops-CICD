@@ -7,7 +7,7 @@ trigger:
       - feature_develop
   paths:
     include:
-      - src/*
+      - src/**
       - Dockerfile
       - package.json
 

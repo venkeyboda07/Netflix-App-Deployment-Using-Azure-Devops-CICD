@@ -1,31 +1,45 @@
 #!/bin/bash
 set -e
 
-echo "Starting Azure CLI script"
+echo "========================================="
+echo " Checking Terraform Installation"
+echo "========================================="
 
-echo "Azure account info"
-az account show
+# If Terraform already exists, skip installation
+if command -v terraform &> /dev/null
+then
+    echo "Terraform is already installed:"
+    terraform -version
+    exit 0
+fi
 
-echo "Installing Terraform"
+echo "========================================="
+echo " Installing Terraform from HashiCorp APT Repo"
+echo "========================================="
 
-wget -q https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_amd64.zip
+# Update packages
+sudo apt-get update -y
 
-unzip -o terraform_1.8.5_linux_amd64.zip
+# Install required dependencies
+sudo apt-get install -y gnupg software-properties-common curl
 
-sudo mv terraform /usr/local/bin/
+# Add HashiCorp GPG key
+curl -fsSL https://apt.releases.hashicorp.com/gpg | \
+  sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 
-terraform version
+# Add official HashiCorp repository
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+sudo tee /etc/apt/sources.list.d/hashicorp.list
 
-echo "Running Terraform"
+# Update apt again
+sudo apt-get update -y
 
-# terraform init
+# Install Terraform
+sudo apt-get install -y terraform
 
-# terraform plan \
-#     -var-file="terraform.tfvars" \
-#     -input=false \
-#     -out=tfplan
+echo "========================================="
+echo " Terraform Installed Successfully"
+echo "========================================="
 
-# # Uncomment if needed
-# # terraform apply -auto-approve
-
-echo "Script completed"
+terraform -version

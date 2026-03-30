@@ -113,8 +113,8 @@ stages:
               terraform apply -auto-approve tfplan
               
               az aks get-credentials \
-                --resource-group myRG \
-                --name myAKS \
+                --resource-group AKScluster \
+                --name tf_akscluster \
                 --overwrite-existing
 
         - task: Bash@3

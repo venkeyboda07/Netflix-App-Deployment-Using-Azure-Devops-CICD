@@ -1,5 +1,0 @@
-grafana:
-  adminUser: admin
-  adminPassword: Admin@123
-  service:
-    type: LoadBalancer

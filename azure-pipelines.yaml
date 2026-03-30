@@ -112,9 +112,17 @@ stages:
 
               terraform apply -auto-approve tfplan
               
+              echo "Getting Terraform outputs..."
+
+              CLUSTER_NAME=$(terraform output -raw aks_cluster_name)
+              RG_NAME=$(terraform output -raw resource_group_name)
+
+              echo "Cluster Name: $CLUSTER_NAME"
+              echo "Resource Group: $RG_NAME"
+
               az aks get-credentials \
-                --resource-group AKScluster \
-                --name tf_akscluster \
+                --resource-group $RG_NAME \
+                --name $CLUSTER_NAME \
                 --overwrite-existing
 
         - task: Bash@3

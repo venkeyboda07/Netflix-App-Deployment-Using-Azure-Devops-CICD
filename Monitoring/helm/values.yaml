@@ -7,7 +7,6 @@ kube-prometheus-stack:
 
     service:
       type: LoadBalancer
-      port: 80
 
   prometheus:
     service:
@@ -15,7 +14,3 @@ kube-prometheus-stack:
 
     prometheusSpec:
       serviceMonitorSelectorNilUsesHelmValues: false
-
-  alertmanager:
-    service:
-      type: LoadBalancer

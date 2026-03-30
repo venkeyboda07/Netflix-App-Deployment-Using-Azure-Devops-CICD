@@ -14,7 +14,7 @@ echo "========================================="
 helm upgrade --install monitoring ./Monitoring/helm \
   -n monitoring \
   --create-namespace \
-  -f Monitoring/helm/override-values.yaml \
+  -f Monitoring/helm/values.yaml \
   --wait \
   --timeout 10m
 
